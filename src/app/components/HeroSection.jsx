@@ -2,7 +2,16 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import TomatoImg from "../../../public/Tomato2.png";
+import { Swiper, SwiperSlide } from "swiper/react"; // Import Swiper components
+import { Autoplay, Pagination } from "swiper/modules"; // Import Swiper modules
+import EggsImg from "../../../public/eggs2.png";
+import VegetablesImg from "../../../public/Vegetables2.png";
 
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+
+// Floating animation for bounce effect
 const floatingAnimation = {
   initial: { y: 0 },
   animate: {
@@ -15,27 +24,17 @@ const floatingAnimation = {
   },
 };
 
-// Define circular orbit for vegetables
-const vegetableVariants = (index, radius = 200) => ({
-  animate: {
-    rotate: [0, 360], // Full 360-degree rotation
-    transition: {
-      duration: 6 + index, // Different speeds for each vegetable
-      repeat: Infinity,
-      ease: "linear",
-    },
-  },
-  // Initial offset to position vegetables around the circle
-  initial: {
-    x: radius * Math.cos((index * 2 * Math.PI) / 3),
-    y: radius * Math.sin((index * 2 * Math.PI) / 3),
-  },
-});
-
 const HeroSection = () => {
+  // Array of images for the carousel
+  const carouselImages = [
+    TomatoImg, // Local image
+    EggsImg,
+    VegetablesImg
+    ];
+
   return (
     <section className="relative bg-gradient-to-b from-green-50 to-white overflow-hidden">
-      <div className="container mx-auto px-4 py-24 md:py-32">
+      <div className="container mx-auto px-4 py-[60px] md:py-[70px]">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -47,7 +46,8 @@ const HeroSection = () => {
               Get the Fresh Food from our Agro Market
             </h1>
             <p className="text-lg text-muted-foreground">
-              Direct from local farmers to your table. Fresh, organic, and sustainably grown produce.
+              Direct from local farmers to your table. Fresh, organic, and
+              sustainably grown produce.
             </p>
             <motion.div
               className="flex space-x-4"
@@ -63,46 +63,39 @@ const HeroSection = () => {
             </motion.div>
           </motion.div>
 
-          <div className="relative h-[600px]">
-            {/* Central Tomato Image */}
-            <motion.div
-              variants={floatingAnimation}
-              initial="initial"
-              animate="animate"
-              className="absolute top-[70px] left-[170px] -translate-x-1/2 -translate-y-1/2 w-[60%] h-[90%]"
+          <div className="relative h-[600px] mt-8 w-full">
+            {/* Swiper Carousel */}
+            <Swiper
+              style={{ height: "80%", width: "60%" }} // Ensure Swiper takes full space
+              modules={[Autoplay, Pagination]}
+              spaceBetween={30}
+              slidesPerView={1}
+              autoplay={{ delay: 3000, disableOnInteraction: false }}
+              pagination={{ clickable: true }}
+              loop={true}
             >
-              <Image
-                src={TomatoImg}
-                alt="Fresh Produce"
-                fill
-                className="object-contain rounded-2xl"
-                priority
-              />
-            </motion.div>
-
-            {/* Orbiting Vegetables */}
-            {/* {[
-              "/placeholder.svg?height=80&width=80&text=Carrot", // Carrot
-              "/placeholder.svg?height=80&width=80&text=Broccoli", // Broccoli
-              "/placeholder.svg?height=80&width=80&text=Lettuce", // Lettuce
-            ].map((src, index) => (
-              <motion.div
-                key={index}
-                className="absolute top-[50%] left-[55%] -translate-x-1/2 -translate-y-1/2"
-                variants={vegetableVariants(index, 200)} // Radius set to 200px
-                initial="initial"
-                animate="animate"
-                style={{ transformOrigin: "center" }} // Ensure rotation happens around the tomato
-              >
-                <Image
-                  src={src}
-                  alt={`Vegetable ${index + 1}`}
-                  width={80}
-                  height={80}
-                  className="rounded-full shadow-lg"
-                />
-              </motion.div>
-            ))} */}
+              {carouselImages.map((src, index) => (
+                <SwiperSlide key={index}>
+                  {/* Wrap the image with motion.div for bounce effect */}
+                  <motion.div
+                    variants={floatingAnimation}
+                    initial="initial"
+                    animate="animate"
+                    className="relative h-full w-full"
+                  >
+                    <Image
+                      src={src}
+                      alt={`Fresh Produce ${index + 1}`}
+                      fill
+                      className="object-contain rounded-2xl"
+                      priority
+                      quality={90} // Increase image quality
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  </motion.div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
       </div>
