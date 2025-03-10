@@ -12,7 +12,7 @@ const ShopPage = () => {
   return (
     <>
       <Header />
-      <section className="py-16 bg-gradient-to-b mt-6 from-white to-green-50">
+      <section className="py-16 bg-gradient-to-b mt-12 from-white to-green-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8 text-center">Shop</h2>
           <FilterSection setCategoryFilter={setCategoryFilter} />
